@@ -1,29 +1,24 @@
-# Binaries
-gocrawuz
-gocrawuz.exe
+# Go build
 *.exe
-*.dll
-*.so
-*.dylib
-
-# Test binary
+*.out
 *.test
+*.log
+*.bak
+*.tmp
 
-# Output files
-results.txt
-urls.txt
-
-# IDE
-.vscode/
+# IDE and editor files
 .idea/
 *.swp
 *.swo
-*~
+.vscode/
+*.DS_Store
 
-# OS
-.DS_Store
+# System files
 Thumbs.db
 
-# Temporary files
-*.log
-*.tmp
+# Results/outputs
+urls.txt
+secrets_found.txt
+
+# Dependency directories
+vendor/
