@@ -28,7 +28,7 @@ func NewHeadlessScanner(baseURL string, maxPages int, enableDeep bool) *Headless
 		MaxPages:      maxPages,
 		Timeout:       30 * time.Second,
 		CollectDelay:  3 * time.Second,
-		EnableDeep:    enableDeep,
+		EnableDeep:    enableDeep, //
 		visited:       make(map[string]bool),
 		discoveredAPI: []string{},
 	}

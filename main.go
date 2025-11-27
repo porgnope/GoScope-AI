@@ -339,7 +339,7 @@ func runComboMode(reader *bufio.Reader) {
 	}
 
 	for _, route := range scanner.spaRoutes {
-		// spaRoutes уже содержит полные URL, не нужно добавлять BaseURL
+		// spaRoutes уже содержит полные URL, не нужно добавлять BaseURL, иначе будут склеенные
 		canonical := CanonicalizeURL(route, opts)
 		allURLs[canonical] = true
 	}
@@ -540,7 +540,6 @@ func saveResultsWithDedup(reader *bufio.Reader, results []Result, scanner *Scann
 
 	if enableSPA && len(scanner.spaRoutes) > 0 {
 		for _, route := range scanner.spaRoutes {
-			// spaRoutes уже содержит полные URL
 			canonical := CanonicalizeURL(route, opts)
 			if _, exists := uniqueURLs[canonical]; !exists {
 				uniqueURLs[canonical] = route

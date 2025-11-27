@@ -50,7 +50,7 @@ type BaselineInfo struct {
 	ForbiddenHash  string
 }
 
-// Глобальные скомпилированные regex для производительности
+// Глобальные скомпилированные regex для оптимизации производительности
 var (
 	endpointPatterns = []*regexp.Regexp{
 		regexp.MustCompile(`<Route[^>]+path=["']([/a-zA-Z0-9_\-:]+)["']`),
@@ -561,7 +561,7 @@ func (s *Scanner) fuzz() []Result {
 				return nil
 			}
 
-			// Random User-Agent support
+			// Random User-Agent
 			if s.RandomUserAgent {
 				req.Header.Set("User-Agent", randomUserAgent())
 			} else {

@@ -197,7 +197,7 @@ func (c *BFSCrawler) CrawlMultiple(startURLs []string) ([]Result, error) {
 	fmt.Println("\n🔄 Starting BFS crawl...")
 	fmt.Printf("📊 Seeds: %d | Max depth: %d | Rate: %v | Max URLs: %d\n\n",
 		len(startURLs), c.config.MaxDepth, c.config.RateLimit, c.config.MaxURLs)
-	
+
 	visitedCount := 0
 
 	for len(c.queue) > 0 && visitedCount < c.config.MaxURLs {
@@ -257,3 +257,5 @@ func (c *BFSCrawler) CrawlMultiple(startURLs []string) ([]Result, error) {
 	fmt.Println("\n\n✅ BFS crawl complete!")
 	return c.allURLs, nil
 }
+
+//later SDB

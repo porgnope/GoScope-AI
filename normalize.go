@@ -127,15 +127,6 @@ func sortQueryParams(rawQuery string) string {
 	return newParams.Encode()
 }
 
-func GetOrigin(urlStr string) (string, error) {
-	u, err := url.Parse(urlStr)
-	if err != nil {
-		return "", err
-	}
-
-	return u.Scheme + "://" + u.Host, nil
-}
-
 func IsInScope(href, baseURL, scopePath string) bool {
 	u, err := url.Parse(href)
 	if err != nil {
