@@ -6324,6 +6324,7 @@ members.sqlite
 members.txt
 members.xls
 members/
+members/signup
 members/login
 members/login.%EXT%
 members/login.html
