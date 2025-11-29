@@ -128,3 +128,6 @@ This tool is for **educational purposes and authorized security testing only**. 
 
 ---
 **Star ⭐ this repo if you find it useful!**
+
+<img width="1280" height="643" alt="изображение" src="https://github.com/user-attachments/assets/d09ec192-8c8a-42ca-ba46-6ca8ad27ef96" />
+
