@@ -20,9 +20,10 @@ import (
 )
 
 type Result struct {
-	URL        string
-	StatusCode int
-	IsSPARoute bool
+	URL         string
+	StatusCode  int
+	IsSPARoute  bool
+	ContextData string
 }
 
 type Scanner struct {
@@ -100,15 +101,14 @@ func randomUserAgent() string {
 	return userAgents[rand.Intn(len(userAgents))]
 }
 
-func NewScanner(baseURL string, threads int, enableSPA bool, verbose bool, enableAnalysis bool, rateLimitMs int, randomUA bool) *Scanner {
+func NewScanner(baseURL string, threads int, enableSPA bool, verbose bool, rateLimitMs int, randomUA bool) *Scanner {
 	return &Scanner{
-		BaseURL:                strings.TrimRight(baseURL, "/"),
-		Threads:                threads,
-		EnableSPA:              enableSPA,
-		Verbose:                verbose,
-		EnableResponseAnalysis: enableAnalysis,
-		RateLimitMs:            rateLimitMs,
-		RandomUserAgent:        randomUA,
+		BaseURL:         strings.TrimRight(baseURL, "/"),
+		Threads:         threads,
+		EnableSPA:       enableSPA,
+		Verbose:         verbose,
+		RateLimitMs:     rateLimitMs,
+		RandomUserAgent: randomUA,
 		httpClient: &http.Client{
 			Timeout: 15 * time.Second,
 			Transport: &http.Transport{
@@ -584,10 +584,6 @@ func (s *Scanner) fuzz() []Result {
 			status := resp.StatusCode
 			hash := fmt.Sprintf("%x", md5.Sum(body))
 
-			if s.EnableResponseAnalysis {
-				s.analyzeResponse(fullURL, string(body))
-			}
-
 			mu.Lock()
 			completed++
 			progress := float64(completed) / float64(total) * 100
@@ -596,16 +592,34 @@ func (s *Scanner) fuzz() []Result {
 
 			fmt.Printf("\r⏳ Progress: %d/%d (%.1f%%) | Found: %d   ",
 				completed, total, progress, foundCount)
-
+			// === СБОР КОНТЕКСТА ДЛЯ AI ===
+			var contextBuilder strings.Builder
+			contextBuilder.WriteString(fmt.Sprintf("Status: %d %s\n", status, http.StatusText(status)))
+			if val := resp.Header.Get("Server"); val != "" {
+				contextBuilder.WriteString("Server: " + val + "\n")
+			}
+			if val := resp.Header.Get("Location"); val != "" {
+				contextBuilder.WriteString("Location: " + val + "\n")
+			}
+			// Берем первые 500 байт тела для контекста
+			previewLen := 500
+			if len(body) < previewLen {
+				previewLen = len(body)
+			}
+			cleanBody := strings.ReplaceAll(string(body[:previewLen]), "\n", " ")
+			contextBuilder.WriteString("Body Preview: " + cleanBody)
+			aiContext := contextBuilder.String()
+			// ==============================
 			if s.isValid(status, hash, string(body), path) {
 				mu.Lock()
 				if !found[canonical] {
 					found[canonical] = true
 					isSPARoute := contains(s.spaRoutes, path)
 					results = append(results, Result{
-						URL:        fullURL,
-						StatusCode: status,
-						IsSPARoute: isSPARoute,
+						URL:         fullURL,
+						StatusCode:  status,
+						IsSPARoute:  isSPARoute,
+						ContextData: aiContext,
 					})
 					s.logVerbose("Found: [%d] %s", status, fullURL)
 				}
@@ -719,34 +733,4 @@ func contains(slice []string, item string) bool {
 		}
 	}
 	return false
-}
-func (s *Scanner) analyzeResponse(url, body string) {
-	found := []string{}
-
-	for name, pattern := range sensitivePatterns {
-		matches := pattern.FindAllString(body, 3)
-		if len(matches) > 0 {
-			found = append(found, fmt.Sprintf("%s: %v", name, matches))
-		}
-	}
-
-	if len(found) > 0 {
-		s.mu.Lock()
-		defer s.mu.Unlock()
-
-		f, err := os.OpenFile("secrets_found.txt", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
-		if err != nil {
-			s.logVerbose("Failed to open secrets_found.txt: %v", err)
-			return
-		}
-		defer f.Close()
-
-		f.WriteString(fmt.Sprintf("URL: %s\n", url))
-		for _, line := range found {
-			f.WriteString("  " + line + "\n")
-		}
-		f.WriteString(strings.Repeat("-", 40) + "\n")
-
-		fmt.Printf("\n[!] Sensitive data found at %s\n", url)
-	}
 }

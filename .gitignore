@@ -1,24 +1,15 @@
-# Go build
-*.exe
-*.out
-*.test
-*.log
-*.bak
-*.tmp
+# Binaries
+goscope.exe
+goscope
 
-# IDE and editor files
-.idea/
-*.swp
-*.swo
-.vscode/
-*.DS_Store
-
-# System files
-Thumbs.db
-
-# Results/outputs
+# Output files
 urls.txt
-secrets_found.txt
+report_ai.md
+results.json
 
-# Dependency directories
-vendor/
+# IDE settings
+.idea/
+.vscode/
+
+# Environment variables
+.env

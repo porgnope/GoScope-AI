@@ -1,4 +1,4 @@
-module goscope
+module goscope1
 
 go 1.25
 
