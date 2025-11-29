@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"goscope1/analyse_ai" // Убедись, что путь совпадает с go.mod
+	"goscope/analyse_ai"
 	"os"
 	"sort"
 	"strconv"
