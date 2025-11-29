@@ -98,13 +98,10 @@ Designed for penetration testers, bug bounty hunters, and security engineers who
 
 #### Сборка из исходников
 
-git clone https://github.com/porgnope/goscope.git
-
-cd goscope
-
-go mod tidy
-
-go build -o goscope main.go
+- git clone https://github.com/porgnope/goscope.git
+- cd goscope
+- go mod tidy
+- go build -o goscope main.go
 
 
 
