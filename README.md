@@ -53,12 +53,6 @@ Designed for penetration testers, bug bounty hunters, and security engineers who
     During the scan, GoScope will ask if you want to perform AI Analysis.
     - If you choose **Yes (y)**, it will prompt you for your **Groq API Key**.
     - You can get a free key at [console.groq.com](https://console.groq.com).
-    - *Note:* You only need to enter the key once per session (or pass it via flag/env).
-
-    **Alternative: Pass Key via Flag (for automation)**
-    ```
-    ./goscope --groq-key "gsk_yOuR_kEy..."
-    ```
 
 ### 🛠️ Scan Modes
 
@@ -117,12 +111,7 @@ Designed for penetration testers, bug bounty hunters, and security engineers who
     В процессе работы программа спросит, хотите ли вы запустить AI-анализ.
     - Если выберете **Да (y)**, программа попросит ввести **Groq API Key**.
     - Получить бесплатный ключ можно на [console.groq.com](https://console.groq.com).
-    - *Примечание:* Ключ нужно ввести один раз (или передать через флаг).
 
-    **Альтернатива: Передача ключа флагом (для скриптов)**
-    ```
-    ./goscope --groq-key "gsk_yOuR_kEy..."
-    ```
 
 ### 🛠️ Режимы сканирования
 
